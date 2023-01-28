@@ -1,6 +1,8 @@
 package Client;
 
 import Server.Task;
+import Server.TaskResult;
+import Server.TaskSchedulerImp;
 
 import java.util.Random;
 
@@ -14,7 +16,7 @@ public class ComputationTask implements Task {
     }
 
     @Override
-    public void execute() { // Perform some computation
+    public TaskResult execute() { // Perform some computation
 
         Random rand = new Random();
         long result = 0;
@@ -22,6 +24,14 @@ public class ComputationTask implements Task {
             result += rand.nextInt();
         }
         System.out.println("Server.Task " + id + " completed with result " + result);
+        TaskResult taskResult = new TaskResult(id,result);
+        return taskResult;
+
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

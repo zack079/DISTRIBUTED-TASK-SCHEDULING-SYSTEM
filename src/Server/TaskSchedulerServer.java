@@ -1,14 +1,12 @@
 package Server;
 
-import Server.TaskQueue;
-import Server.WorkerThread;
+
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TaskSchedulerServer {
     private static final int NUM_WORKER_THREADS = 8;
-
     private final ExecutorService threadPool; //
     private final TaskQueue taskQueue; // task queue
 
@@ -23,13 +21,23 @@ public class TaskSchedulerServer {
         // Start worker threads to process tasks from the queue
         for (int i = 0; i < NUM_WORKER_THREADS; i++) {
             // add threads to the thread pool
-            threadPool.submit(new WorkerThread(taskQueue));
+            threadPool.submit(new WorkerThread(taskQueue));//worker threads
         }
 
         // Wait for tasks to be submitted and processed
         while (true) {
-            Task task = taskQueue.take();
-            threadPool.submit(task);
+            Task task = taskQueue.take();//wait for an element to become available then take it
+            threadPool.submit(task); //add it to the threadPool,
+            System.out.println("task has been submited to threadpool!");
         }
+    }
+
+
+    public TaskQueue getTaskQueue() {
+        return taskQueue;
+    }
+
+    public ExecutorService getThreadPool() {
+        return threadPool;
     }
 }

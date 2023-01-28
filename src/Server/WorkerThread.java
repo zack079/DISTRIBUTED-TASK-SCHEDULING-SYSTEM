@@ -14,7 +14,11 @@ public class WorkerThread implements Runnable {
         while (true) {
             try {
                 Task task = taskQueue.take();
-                task.execute();
+                System.out.println("thread number "+Thread.currentThread().getId() +" has taken a task!");
+                TaskResult taskResult=task.execute();
+                System.out.println("thread number "+Thread.currentThread().getId() +" has finished his task!");
+                TaskSchedulerImp.taskResults.add(taskResult);
+                System.out.println("(WorkerThread)task Result id is:"+taskResult.getTaskId());
             } catch (InterruptedException e) {
                 break;
             }

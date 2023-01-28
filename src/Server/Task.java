@@ -1,5 +1,8 @@
 package Server;
 
-public interface Task extends Runnable{
-    void execute();
+import java.io.Serializable;
+
+public interface Task extends Runnable, Serializable {
+    TaskResult execute();
+    int getId();
 }
