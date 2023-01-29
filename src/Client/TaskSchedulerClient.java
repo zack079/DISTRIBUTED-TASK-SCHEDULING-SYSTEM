@@ -27,10 +27,10 @@ public class TaskSchedulerClient {
             int uniqueID = generateId();
 
             // Submit a task to the server
-            int taskId = taskScheduler.submitTask( new ComputationTask (uniqueID , 10000));
+            int taskId = taskScheduler.submitTask( new MatrixProduct (uniqueID , 5,8));
             System . out . println (" Submitted task with ID " + taskId );
             // Wait for the task to complete
-            Thread.sleep(3000);
+            //Thread.sleep(2000);
             TaskResult result = taskScheduler . getResult ( taskId ) ;
 
             System . out . println (" Server.Task result : " + result . getResult () );

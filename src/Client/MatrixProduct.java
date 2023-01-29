@@ -16,7 +16,9 @@ public class MatrixProduct implements Task {
 
     @Override
     public TaskResult execute() {
+
         System.out.println(x+"*"+y+"="+x*y);
+
         TaskResult taskResult = new TaskResult(id,x*y);
 ////        TaskSchedulerImp.taskResults.add(taskResult);
         return taskResult;
