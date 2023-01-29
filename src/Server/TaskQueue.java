@@ -12,6 +12,7 @@ public class TaskQueue {
     }
 
     public void add(Task task) throws InterruptedException {
+        System.out.println("task number :"+task.getId()+" has been added to the taskQueue");
         queue.put(task);
     }
 

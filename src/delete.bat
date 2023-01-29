@@ -1,1 +1,2 @@
-rm */*.class
+DEL Client\*.class
+DEL Server\*.class

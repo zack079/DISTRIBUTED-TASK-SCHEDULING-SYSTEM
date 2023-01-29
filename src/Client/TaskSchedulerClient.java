@@ -30,7 +30,8 @@ public class TaskSchedulerClient {
             int taskId = taskScheduler.submitTask( new MatrixProduct (uniqueID , 5,8));
             System . out . println (" Submitted task with ID " + taskId );
             // Wait for the task to complete
-            //Thread.sleep(2000);
+            System.out.println("waiting for 1.5 seconds ...");
+            Thread.sleep(1500);
             TaskResult result = taskScheduler . getResult ( taskId ) ;
 
             System . out . println (" Server.Task result : " + result . getResult () );

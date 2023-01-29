@@ -32,14 +32,17 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
         try {
 
             //TODO: should wait for the task to complete, or return task not finished
-            System.out.println("searching for result...");
             for(TaskResult t:taskResults){
                 if(t.getTaskId()==taskId){
-                    System.out.println("taskResult is finished!");
+                    System.out.println("taskResult is found in queue, queue size:"+tasks.size());
                     taskResult=t;
                     break;
                 }
             }
+            if(taskResult==null)
+                System.out.println("taskResult is NOT found in queue!!");
+
+
 //                while(true){
 //                    for(TaskResult t:taskResults){
 //                        if(t.getTaskId()==taskId){
@@ -56,8 +59,9 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        if(taskResult==null)
-            System.out.println("task hasn't finished yet!");
+
+        System.out.println("*********");
         return taskResult;
+
     }
 }
