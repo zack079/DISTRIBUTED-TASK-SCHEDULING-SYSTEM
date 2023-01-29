@@ -1,9 +1,5 @@
 package Server;
 
-import Server.TaskQueue;
-
-import java.util.concurrent.BlockingQueue;
-
 public class WorkerThread implements Runnable {
     private final TaskQueue taskQueue;
 
@@ -15,10 +11,16 @@ public class WorkerThread implements Runnable {
     public void run() {
         while (true) {
             try {
+                System.out.println("Worker thread num "+Thread.currentThread().getId() + " is ready...");
                 Task task = taskQueue.take();
+                System.out.println("thread number "+Thread.currentThread().getId() +" has taken task number "+task.getId()+" from the queue");
+
                 TaskResult taskResult=task.execute();
                 System.out.println("thread number "+Thread.currentThread().getId() +" has finished his task with id: "+taskResult.getTaskId());
                 TaskSchedulerImp.taskResults.add(taskResult);
+                TaskSchedulerImp.newTaskResultAdded =true;
+                System.out.println("thread number "+Thread.currentThread().getId() +" has added task number "+taskResult.getTaskId() + " to the task results list");
+
 
             } catch (InterruptedException e) {
                 break;

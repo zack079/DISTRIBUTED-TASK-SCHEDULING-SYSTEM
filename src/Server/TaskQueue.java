@@ -22,7 +22,5 @@ public class TaskQueue {
         return task;
     }
 
-    public BlockingQueue<Task> getQueue() {
-        return queue;
-    }
+
 }

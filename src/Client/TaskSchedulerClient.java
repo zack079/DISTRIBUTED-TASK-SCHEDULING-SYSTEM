@@ -31,7 +31,7 @@ public class TaskSchedulerClient {
             System . out . println (" Submitted task with ID " + taskId );
             // Wait for the task to complete
             System.out.println("waiting for 1.5 seconds ...");
-            Thread.sleep(1500);
+            //Thread.sleep(1500);
             TaskResult result = taskScheduler . getResult ( taskId ) ;
 
             System . out . println (" Server.Task result : " + result . getResult () );

@@ -7,8 +7,9 @@ import java.util.List;
 public class TaskSchedulerImp implements TaskSchedulerInterface{
     private final TaskSchedulerServer taskSchedulerServer;
     public static final List<Task> tasks=new ArrayList<Task>();
-    public static final List<TaskResult> taskResults=new ArrayList<TaskResult>();
+    public static final List<TaskResult> taskResults= new ArrayList<>();
 
+    public static volatile boolean newTaskResultAdded =false;
     public TaskSchedulerImp(TaskSchedulerServer taskSchedulerServer) {
         this.taskSchedulerServer = taskSchedulerServer;
     }
@@ -32,37 +33,27 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
         TaskResult taskResult=null;
         try {
 
-            //TODO: should wait for the task to complete, or return task not finished
+
+
+            while (!newTaskResultAdded) {
+                Thread.onSpinWait();
+            }
+
+            newTaskResultAdded=false;
             for(TaskResult t:taskResults){
                 if(t.getTaskId()==taskId){
-                    System.out.println("taskResult is found in queue, queue size:"+tasks.size());
                     taskResult=t;
                     break;
                 }
             }
-            if(taskResult==null)
-                System.out.println("taskResult is NOT found in queue!!");
-
-
-//                while(true){
-//                    for(TaskResult t:taskResults){
-//                        if(t.getTaskId()==taskId){
-//                            taskResult=t;
-//                            break;
-//                        }
-//                    }
-//                    if(taskResult!=null)
-//                        break;
-//                }
-
-
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         System.out.println("*********");
         return taskResult;
 
     }
+
 }

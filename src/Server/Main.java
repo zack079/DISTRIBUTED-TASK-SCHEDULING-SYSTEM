@@ -16,7 +16,7 @@ public class Main {
 
         Registry registry = LocateRegistry.getRegistry("127.0.0.1",2022);
         registry.bind("taskScheduler", skeleton );
-        System.out.println("binded");
+        System.out.println("Server ready...");
         taskSchedulerServer.start();// start infinite loop
     }
 }
