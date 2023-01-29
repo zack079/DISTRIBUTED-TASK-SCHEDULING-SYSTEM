@@ -22,13 +22,14 @@ public class TaskSchedulerServer {
             // add threads to the thread pool
             threadPool.submit(new WorkerThread(taskQueue));//worker threads
         }
-
+        /*
         // Wait for tasks to be submitted and processed
         while (true) {
             Task task = taskQueue.take();//wait for an element to become available then take it
+            System.out.println("(TaskSchedulerServer:29)size of taskQueue: "+taskQueue.getQueue().size());
             threadPool.submit(task); //add it to the threadPool,
             System.out.println("task has been submited to threadpool!");
-        }
+        }*/
     }
 
     public TaskQueue getTaskQueue() {

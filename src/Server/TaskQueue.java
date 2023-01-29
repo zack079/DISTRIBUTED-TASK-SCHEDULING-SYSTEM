@@ -21,4 +21,8 @@ public class TaskQueue {
         System.out.println("task number "+task.getId()+" has been taken from the BlockingQueue");
         return task;
     }
+
+    public BlockingQueue<Task> getQueue() {
+        return queue;
+    }
 }
