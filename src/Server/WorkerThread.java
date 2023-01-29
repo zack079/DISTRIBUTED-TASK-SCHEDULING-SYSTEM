@@ -5,9 +5,9 @@ import Server.TaskQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class WorkerThread implements Runnable {
-    private BlockingQueue<Task> taskQueue;
+    private final TaskQueue taskQueue;
 
-    public WorkerThread( BlockingQueue < Task > taskQueue) {
+    public WorkerThread(TaskQueue taskQueue) {
         this.taskQueue = taskQueue;
     }
 

@@ -12,11 +12,13 @@ public class TaskQueue {
     }
 
     public void add(Task task) throws InterruptedException {
-        System.out.println("task number :"+task.getId()+" has been added to the taskQueue");
+        System.out.println("task number "+task.getId()+" has been added to the BlockingQueue");
         queue.put(task);
     }
 
     public Task take() throws InterruptedException {
-        return queue.take();
+        Task task = queue.take();
+        System.out.println("task number "+task.getId()+" has been taken from the BlockingQueue");
+        return task;
     }
 }

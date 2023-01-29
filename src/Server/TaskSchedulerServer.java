@@ -2,9 +2,7 @@ package Server;
 
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class TaskSchedulerServer {
     private static final int NUM_WORKER_THREADS = 8;
@@ -22,7 +20,7 @@ public class TaskSchedulerServer {
         // Start worker threads to process tasks from the queue
         for (int i = 0; i < NUM_WORKER_THREADS; i++) {
             // add threads to the thread pool
-            threadPool.submit(new WorkerThread((BlockingQueue<Task>) taskQueue));//worker threads
+            threadPool.submit(new WorkerThread(taskQueue));//worker threads
         }
 
         // Wait for tasks to be submitted and processed
@@ -32,7 +30,6 @@ public class TaskSchedulerServer {
             System.out.println("task has been submited to threadpool!");
         }
     }
-
 
     public TaskQueue getTaskQueue() {
         return taskQueue;
