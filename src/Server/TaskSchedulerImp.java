@@ -9,7 +9,7 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
     public static final List<Task> tasks=new ArrayList<Task>();
     public static final List<TaskResult> taskResults= new ArrayList<>();
 
-    public static volatile boolean newTaskResultAdded =false;
+    //public static volatile boolean newTaskResultAdded =false;
     public TaskSchedulerImp(TaskSchedulerServer taskSchedulerServer) {
         this.taskSchedulerServer = taskSchedulerServer;
     }
@@ -32,23 +32,16 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
 
         TaskResult taskResult=null;
         try {
-
-
-
-            while (!newTaskResultAdded) {
-                Thread.onSpinWait();
-            }
-
-            newTaskResultAdded=false;
-            for(TaskResult t:taskResults){
-                if(t.getTaskId()==taskId){
-                    taskResult=t;
-                    break;
-                }
-            }
-
+            Thread.sleep(300);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        for(TaskResult t:taskResults){
+            if(t.getTaskId()==taskId){
+                taskResult=t;
+                break;
+            }
         }
 
         System.out.println("*********");

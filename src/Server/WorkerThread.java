@@ -18,12 +18,14 @@ public class WorkerThread implements Runnable {
                 TaskResult taskResult=task.execute();
                 System.out.println("thread number "+Thread.currentThread().getId() +" has finished his task with id: "+taskResult.getTaskId());
                 TaskSchedulerImp.taskResults.add(taskResult);
-                TaskSchedulerImp.newTaskResultAdded =true;
+
                 System.out.println("thread number "+Thread.currentThread().getId() +" has added task number "+taskResult.getTaskId() + " to the task results list");
 
 
             } catch (InterruptedException e) {
                 break;
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
     }
