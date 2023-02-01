@@ -33,7 +33,7 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
         TaskResult taskResult=null;
         //TODO: wait for taskResult to be ready
         try {
-            Thread.sleep(300);
+            Thread.sleep(500);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,8 +44,10 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
                 break;
             }
         }
+        if(taskResult==null)
+            System.out.println("no task result is found !!!!!!!!!!");
 
-        System.out.println("*********");
+        System.out.println("TaskSchedulerImp ended*********");
         return taskResult;
 
     }
