@@ -31,6 +31,7 @@ public class TaskSchedulerImp implements TaskSchedulerInterface{
     public TaskResult getResult(int taskId) throws RemoteException {
 
         TaskResult taskResult=null;
+        //TODO: wait for taskResult to be ready
         try {
             Thread.sleep(300);
         } catch (Exception e) {
