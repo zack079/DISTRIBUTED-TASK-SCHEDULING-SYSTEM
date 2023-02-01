@@ -1,3 +1,3 @@
 DEL Client\*.class
 DEL Server\*.class
-DEL output.jpg
+DEL output.png

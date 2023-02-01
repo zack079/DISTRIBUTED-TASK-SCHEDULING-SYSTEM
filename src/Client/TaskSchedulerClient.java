@@ -33,14 +33,6 @@ public class TaskSchedulerClient {
         OutputStream out = new FileOutputStream( "output.png");
         out.write(serializedFile);
         out.close();
-//
-//        ByteArrayInputStream inStreambj = new ByteArrayInputStream(serializedFile);
-//
-//        // read image from byte array
-//        BufferedImage newImage = ImageIO.read(inStreambj);
-//
-//        // write output image
-//        ImageIO.write(newImage, "jpg", new File("outputImage.jpg"));
 
     }
 
@@ -67,7 +59,6 @@ public class TaskSchedulerClient {
 
             // Submit a tasks to the server
 
-            //TODO: uncomment
             int taskId1 = taskScheduler.submitTask(new ComputationTask(uniqueID1, 10000));
             System.out.println(" Submitted task with ID " + taskId1);
 
@@ -79,17 +70,14 @@ public class TaskSchedulerClient {
             System.out.println(" Submitted task with ID " + taskId3);
             // Wait for the task to complete
 
-//TODO: uncomment
             TaskResult result1 = taskScheduler.getResult(taskId1);
             TaskResult result2 = taskScheduler.getResult(taskId2);
             TaskResult result3 = taskScheduler.getResult(taskId3);
 
-            //TODO: uncomment
             long ComputationTaskDuration = (long) result1.getResult();
             int[][] matrixProduct = (int[][]) result2.getResult();
             byte [] filteredImageSerialized=(byte [])result3.getResult();
 
-//TODO: uncomment
             System.out.println("Result of task with id:" + result1.getTaskId());
             System.out.println(ComputationTaskDuration);
 
