@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Main {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException, InterruptedException {
+
         TaskSchedulerServer taskSchedulerServer = new TaskSchedulerServer();
 
         TaskSchedulerInterface taskScheduler= new TaskSchedulerImp(taskSchedulerServer);

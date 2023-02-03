@@ -8,10 +8,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class GreenFilter {
-    public static byte[] serializedFile;
+    public static byte[] serializedImage;
+    public static int port;
+
+
     public static void setGreenFilter() throws IOException {
 
-        InputStream is = new ByteArrayInputStream(serializedFile);
+        InputStream is = new ByteArrayInputStream(serializedImage);
         BufferedImage img = ImageIO.read(is);
 
 
@@ -29,20 +32,27 @@ public class GreenFilter {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(img, "png", baos);
-        serializedFile = baos.toByteArray();
+        serializedImage = baos.toByteArray();
     }
 
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverScoket =new ServerSocket(3030);
-        System.out.println("slave 3 is ready ...");
+        if (args.length > 0) {
+            port = Integer.parseInt(args[0]);
+
+        } else {
+
+            throw new RuntimeException();
+        }
+        ServerSocket serverScoket =new ServerSocket(port);//port =3030,3040
+        System.out.println("GreenFilter salve is ready on port "+port+" ...");
         Socket socket=serverScoket.accept();
         InputStream inputStream=socket.getInputStream();
         DataInputStream dataInputStream=new DataInputStream(inputStream);
         int fileLength = dataInputStream.readInt();
         if(fileLength>0){
-            serializedFile=new byte[fileLength];
-            dataInputStream.readFully(serializedFile,0,fileLength);
+            serializedImage =new byte[fileLength];
+            dataInputStream.readFully(serializedImage,0,fileLength);
         }else{
             System.out.println("file's empty!");
         }
@@ -52,11 +62,12 @@ public class GreenFilter {
 
         OutputStream outputStream=socket.getOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeInt(serializedFile.length);
+        dataOutputStream.writeInt(serializedImage.length);
 
-        dataOutputStream.write(serializedFile);
+        dataOutputStream.write(serializedImage);
 
-        serverScoket.close();
+       inputStream.close();
+       outputStream.close();
 
     }
 }
