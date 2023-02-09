@@ -3,37 +3,29 @@ package Slave;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class GreenFilter {
+public class ConvolutionFilter {
     public static byte[] serializedImage;
     public static int port;
+    public static float[] kernel = new float[9];
 
-
-    public static void setGreenFilter() throws IOException {
-
+    public static void Convole() throws IOException {
         InputStream is = new ByteArrayInputStream(serializedImage);
-        BufferedImage img = ImageIO.read(is);
-
-
-        for(int i=0 ; i < img.getHeight() ; i++){
-            for(int j=0 ; j < img.getWidth() ; j++){
-
-                Color c = new Color(img.getRGB(j,i));
-
-                int green = 255 - c.getGreen();
-
-                Color newColor = new Color(0,green,0);
-                img.setRGB(j,i,newColor.getRGB());
-            }
-        }
+        BufferedImage inputimage = ImageIO.read(is);
+        Kernel kernel1 = new Kernel(3, 3, kernel);
+        ConvolveOp convolution = new ConvolveOp(kernel1);
+        BufferedImage outputimage = convolution.filter(inputimage, null);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, "png", baos);
+        ImageIO.write(outputimage, "png", baos);
         serializedImage = baos.toByteArray();
     }
+
 
 
     public static void main(String[] args) throws IOException {
@@ -44,11 +36,22 @@ public class GreenFilter {
 
             throw new RuntimeException();
         }
-        ServerSocket serverScoket =new ServerSocket(port);//port =3030,3040,3050,3060
-        System.out.println("GreenFilter salve is ready on port "+port+" ...");
+        ServerSocket serverScoket =new ServerSocket(port);//port =4030,4040,4050,4060
+        System.out.println("ConvolutionFilter salve is ready on port "+port+" ...");
         Socket socket=serverScoket.accept();
         InputStream inputStream=socket.getInputStream();
         DataInputStream dataInputStream=new DataInputStream(inputStream);
+
+        for (int i = 0; i < 9; i++) {
+            float value=dataInputStream.readFloat();
+            kernel[i] = value;
+        }
+        //TODO : delete
+        for (int i = 0; i < kernel.length; i++) {
+            System.out.print(kernel[i]+"|");
+        }
+        System.out.println();
+
         int fileLength = dataInputStream.readInt();
         if(fileLength>0){
             serializedImage =new byte[fileLength];
@@ -57,7 +60,7 @@ public class GreenFilter {
             System.out.println("file's empty!");
         }
         //output();
-        setGreenFilter();
+        Convole();
         //sending back the file
 
         OutputStream outputStream=socket.getOutputStream();
@@ -66,8 +69,8 @@ public class GreenFilter {
 
         dataOutputStream.write(serializedImage);
 
-       inputStream.close();
-       outputStream.close();
+        inputStream.close();
+        outputStream.close();
 
     }
 }

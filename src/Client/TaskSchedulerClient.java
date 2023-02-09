@@ -6,9 +6,11 @@ import Server.TaskSchedulerInterface;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -29,13 +31,39 @@ public class TaskSchedulerClient {
         return contentSerialized;
     }
 
-    public static void writeOutImage(byte [] serializedFile) throws IOException {
-        OutputStream out = new FileOutputStream( "output.png");
+    public static void writeOutImage(byte [] serializedFile,String name) throws IOException {
+        OutputStream out = new FileOutputStream( name+".png");
         out.write(serializedFile);
         out.close();
 
     }
 
+
+    public static float[] toFloatArray(byte[] bytes) {
+        float[] floats = new float[bytes.length/4];
+        ByteBuffer.wrap(bytes).asFloatBuffer().get(floats).array();
+        return floats;
+    }
+
+    public static byte[] floatArrayToByteArray(float[] floatArray) {
+        int len = floatArray.length;
+        byte[] byteArray = new byte[len * 4];
+        for (int i = 0; i < len; i++) {
+            int floatBits = Float.floatToIntBits(floatArray[i]);
+            byte[] bytes = ByteBuffer.allocate(4).putInt(floatBits).array();
+            System.arraycopy(bytes, 0, byteArray, i * 4, 4);
+        }
+        return byteArray;
+    }
+
+
+    public static byte[] floatToByte(float[] input) {
+        byte[] ret = new byte[input.length*4];
+        for (int x = 0; x < input.length; x++) {
+            ByteBuffer.wrap(ret, x*4, 4).putFloat(input[x]);
+        }
+        return ret;
+    }
     public static void main(String[] args) {
         try {
             // Look up the remote task scheduler
@@ -45,17 +73,18 @@ public class TaskSchedulerClient {
             int uniqueID1 = 1;
             int uniqueID2 = 2;
             int uniqueID3=3;
+            int uniqueID4=4;
             //
             File file = new File("./Client/image.png");
 
-            if(file.exists())
-                System.out.println("file is null");
-            else
-                System.out.println("file isn't null");
 
             byte [] serializedImage=serializeFile(file);
             int[][] matrix1 = {{1, 2, 3}, {4, 5, 6}};
             int[][] matrix2 = {{7, 8}, {9, 10}, {11, 12}};
+           // float [] kernelArray = {0f,0f,0f,0f,5f,0f,0f,0f,0f};
+           // byte [] kernelInBytes = floatToByte(kernelArray);
+            int [] kernel={0,0,0,0,5,0,0,0,0};
+           // Kernel kernel=new Kernel(kernelArray);
 
             // Submit a tasks to the server
 
@@ -70,13 +99,18 @@ public class TaskSchedulerClient {
             System.out.println(" Submitted task with ID " + taskId3);
             // Wait for the task to complete
 
+            int taskId4 = taskScheduler.submitTask(new ConvolutionTask(uniqueID4, serializedImage,kernel));
+            System.out.println(" Submitted task with ID " + taskId4);
+
             TaskResult result1 = taskScheduler.getResult(taskId1);
             TaskResult result2 = taskScheduler.getResult(taskId2);
             TaskResult result3 = taskScheduler.getResult(taskId3);
+            TaskResult result4 = taskScheduler.getResult(taskId4);
 
             long ComputationTaskDuration = (long) result1.getResult();
             int[][] matrixProduct = (int[][]) result2.getResult();
             byte [] filteredImageSerialized=(byte [])result3.getResult();
+            byte [] ConvolutionImageSerialized=(byte [])result4.getResult();
 
             System.out.println("Result of task with id:" + result1.getTaskId());
             System.out.println(ComputationTaskDuration);
@@ -92,7 +126,9 @@ public class TaskSchedulerClient {
 
             System.out.println("Result of task with id:" + result3.getTaskId());
 
-            writeOutImage(filteredImageSerialized);
+            writeOutImage(filteredImageSerialized,"filter");
+
+            writeOutImage(ConvolutionImageSerialized,"convolution");
 
 
         } catch (Exception e) {
