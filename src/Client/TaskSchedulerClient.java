@@ -17,10 +17,10 @@ import java.util.Random;
 public class TaskSchedulerClient {
 
     //private static List<byte[]> serializedFiles=new ArrayList<>();
-
+    public static int i=0;
     public static int generateId() {
-        Random rand = new Random(System.currentTimeMillis());
-        int id = rand.nextInt(1000);
+        int id=i;
+        i++;
         return id;
     }
     public static byte [] serializeFile(File file) throws IOException {
@@ -70,10 +70,10 @@ public class TaskSchedulerClient {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 2022);
 
             TaskSchedulerInterface taskScheduler = (TaskSchedulerInterface) registry.lookup("taskScheduler");
-            int uniqueID1 = 1;
-            int uniqueID2 = 2;
-            int uniqueID3=3;
-            int uniqueID4=4;
+            int uniqueID1 = generateId();
+            int uniqueID2 = generateId();
+            int uniqueID3=generateId();
+            int uniqueID4=generateId();
             //
             File file = new File("./Client/image.png");
 
@@ -81,11 +81,9 @@ public class TaskSchedulerClient {
             byte [] serializedImage=serializeFile(file);
             int[][] matrix1 = {{1, 2, 3}, {4, 5, 6}};
             int[][] matrix2 = {{7, 8}, {9, 10}, {11, 12}};
-           // float [] kernelArray = {0f,0f,0f,0f,5f,0f,0f,0f,0f};
-           // byte [] kernelInBytes = floatToByte(kernelArray);
-            int [] kernel={0,0,0,0,5,0,0,0,0};
-           // Kernel kernel=new Kernel(kernelArray);
 
+            int [] kernel={0,0,0,0,5,0,0,0,0};
+    
             // Submit a tasks to the server
 
             int taskId1 = taskScheduler.submitTask(new ComputationTask(uniqueID1, 10000));

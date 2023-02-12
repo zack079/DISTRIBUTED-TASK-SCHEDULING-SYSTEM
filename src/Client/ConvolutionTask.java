@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 public class ConvolutionTask implements Task {
     private final int id;
-    //TODO : fucking crazy shit not working
     //public static byte [] kernelInBytes;
 
     //public static float [] kernelInFloat;
@@ -124,7 +123,6 @@ public class ConvolutionTask implements Task {
 //        }
 
         for (int anInt : this.kernel) {
-            System.out.print(anInt + "|");
             dataOutputStream.writeFloat((float)anInt);
         }
 
@@ -160,7 +158,7 @@ public class ConvolutionTask implements Task {
             byte [] serializedImageTopRight=splitImage(serializedImage,TOP_RIGHT);
             byte [] serializedImageBottomLeft=splitImage(serializedImage,BOTTOM_LEFT);
             byte [] serializedImageBottomRight=splitImage(serializedImage,BOTTOM_RIGHT);
-            
+
             sendToSlave(serializedImageTopLeft,socketTopLeft);
             sendToSlave(serializedImageTopRight,socketTopRight);
             sendToSlave(serializedImageBottomLeft,socketBottomLeft);
