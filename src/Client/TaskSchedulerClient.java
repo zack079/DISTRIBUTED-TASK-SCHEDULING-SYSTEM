@@ -76,13 +76,16 @@ public class TaskSchedulerClient {
         }
 
         System.out.println("Enter the number of rows and columns of matrix B:");
+        System.out.print("rows=");
         int rowsB = scanner.nextInt();
+        System.out.print("columns=");
         int columnsB = scanner.nextInt();
 
         int[][] matrixB = new int[rowsB][columnsB];
         System.out.println("Enter the elements of matrix B:");
         for (int i = 0; i < rowsB; i++) {
             for (int j = 0; j < columnsB; j++) {
+                System.out.print("Matrix["+i+"]["+j+"]=");
                 matrixB[i][j] = scanner.nextInt();
             }
         }
@@ -118,7 +121,7 @@ public class TaskSchedulerClient {
 
         int[] kernel = new int[9];
         for (int i = 0; i < 9; i++) {
-            System.out.println("kernel["+i+"]=");
+            System.out.print("kernel["+i+"]=");
             kernel[i] = input.nextInt();
         }
         Task task = new ConvolutionTask(taskId, serializedImage,kernel);
@@ -147,7 +150,21 @@ public class TaskSchedulerClient {
 
     }
 
-    public static void showResult(TaskResult result,int taskType) throws IOException {
+    public static String getType(int taskType) {
+        String type="";
+        if(taskType==CONVOLUTION){
+            type="Convolution";
+        }else if(taskType==COMPUTATION){
+            type="Computation";
+        }else if(taskType==GREEN_FILTER){
+            type="Green filter";
+        }else if(taskType==MATRIX_MULTIPLICATION){
+            type="matrix multiplication";
+        }
+        return type;
+    }
+
+    public static void showResult(TaskResult result, int taskType) throws IOException {
 
 
         if(taskType==CONVOLUTION){
@@ -180,8 +197,10 @@ public class TaskSchedulerClient {
 
     public static void getResult() throws IOException {
         System.out.println("Choose a task ID:");
+        String type;
         for(TaskModel t : taskModels){
-            System.out.println(t.getTask().getId()+" - ");//Todo : diplay task type
+            type=getType(t.getTaskType());
+            System.out.println(t.getTask().getId()+" - "+type);//Todo : diplay task type
         }
         Scanner input = new Scanner(System.in);
         int taskId = input.nextInt();
