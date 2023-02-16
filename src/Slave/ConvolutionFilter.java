@@ -33,44 +33,44 @@ public class ConvolutionFilter {
             port = Integer.parseInt(args[0]);
 
         } else {
-
             throw new RuntimeException();
         }
         ServerSocket serverScoket =new ServerSocket(port);//port =4030,4040,4050,4060
         System.out.println("ConvolutionFilter salve is ready on port "+port+" ...");
-        Socket socket=serverScoket.accept();
-        InputStream inputStream=socket.getInputStream();
-        DataInputStream dataInputStream=new DataInputStream(inputStream);
+        while(true){
+            Socket socket=serverScoket.accept();
+            InputStream inputStream=socket.getInputStream();
+            DataInputStream dataInputStream=new DataInputStream(inputStream);
+            //TODO add while true here
 
-        for (int i = 0; i < 9; i++) {
-            float value=dataInputStream.readFloat();
-            kernel[i] = value;
+            for (int i = 0; i < 9; i++) {
+                float value=dataInputStream.readFloat();
+                kernel[i] = value;
+            }
+
+
+            int fileLength = dataInputStream.readInt();
+            if(fileLength>0){
+                serializedImage =new byte[fileLength];
+                dataInputStream.readFully(serializedImage,0,fileLength);
+            }else{
+                System.out.println("file's empty!");
+            }
+            //output();
+            Convole();
+            //sending back the file
+
+            OutputStream outputStream=socket.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeInt(serializedImage.length);
+
+            dataOutputStream.write(serializedImage);
+            System.out.println("Slave has finished!");
         }
-        //TODO : delete
-        for (int i = 0; i < kernel.length; i++) {
-            System.out.print(kernel[i]+"|");
-        }
-        System.out.println();
 
-        int fileLength = dataInputStream.readInt();
-        if(fileLength>0){
-            serializedImage =new byte[fileLength];
-            dataInputStream.readFully(serializedImage,0,fileLength);
-        }else{
-            System.out.println("file's empty!");
-        }
-        //output();
-        Convole();
-        //sending back the file
-
-        OutputStream outputStream=socket.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeInt(serializedImage.length);
-
-        dataOutputStream.write(serializedImage);
-
-        inputStream.close();
-        outputStream.close();
+        //TODO : end of while true loop
+        //inputStream.close();
+        //outputStream.close();
 
     }
 }

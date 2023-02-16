@@ -64,13 +64,16 @@ public class TaskSchedulerClient {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter the number of rows and columns of matrix A:");
+        System.out.print("rows=");
         int rowsA = scanner.nextInt();
+        System.out.print("columns=");
         int columnsA = scanner.nextInt();
 
         int[][] matrixA = new int[rowsA][columnsA];
         System.out.println("Enter the elements of matrix A:");
         for (int i = 0; i < rowsA; i++) {
             for (int j = 0; j < columnsA; j++) {
+                System.out.print("Matrix["+i+"]["+j+"]=");
                 matrixA[i][j] = scanner.nextInt();
             }
         }
@@ -200,7 +203,7 @@ public class TaskSchedulerClient {
         String type;
         for(TaskModel t : taskModels){
             type=getType(t.getTaskType());
-            System.out.println(t.getTask().getId()+" - "+type);//Todo : diplay task type
+            System.out.println(t.getTask().getId()+" - "+type);
         }
         Scanner input = new Scanner(System.in);
         int taskId = input.nextInt();

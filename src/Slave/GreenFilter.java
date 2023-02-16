@@ -46,28 +46,34 @@ public class GreenFilter {
         }
         ServerSocket serverScoket =new ServerSocket(port);//port =3030,3040,3050,3060
         System.out.println("GreenFilter salve is ready on port "+port+" ...");
-        Socket socket=serverScoket.accept();
-        InputStream inputStream=socket.getInputStream();
-        DataInputStream dataInputStream=new DataInputStream(inputStream);
-        int fileLength = dataInputStream.readInt();
-        if(fileLength>0){
-            serializedImage =new byte[fileLength];
-            dataInputStream.readFully(serializedImage,0,fileLength);
-        }else{
-            System.out.println("file's empty!");
+        while(true){
+            Socket socket=serverScoket.accept();
+            InputStream inputStream=socket.getInputStream();
+            DataInputStream dataInputStream=new DataInputStream(inputStream);
+            //TODO add while true here
+
+            int fileLength = dataInputStream.readInt();
+            if(fileLength>0){
+                serializedImage =new byte[fileLength];
+                dataInputStream.readFully(serializedImage,0,fileLength);
+            }else{
+                System.out.println("file's empty!");
+            }
+            //output();
+            setGreenFilter();
+            //sending back the file
+
+            OutputStream outputStream=socket.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeInt(serializedImage.length);
+
+            dataOutputStream.write(serializedImage);
+            System.out.println("slave has finished!");
         }
-        //output();
-        setGreenFilter();
-        //sending back the file
 
-        OutputStream outputStream=socket.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeInt(serializedImage.length);
-
-        dataOutputStream.write(serializedImage);
-
-       inputStream.close();
-       outputStream.close();
+        //TODO : end of while true loop
+       // inputStream.close();
+        //outputStream.close();
 
     }
 }
